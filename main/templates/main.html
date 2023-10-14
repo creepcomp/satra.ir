@@ -1,0 +1,61 @@
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساترا - سامانه داخلی</title>
+
+    <link rel="stylesheet" href="/static/main/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/static/main/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/static/main/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="/static/main/main.css">
+    
+    <script src="/static/main/bootstrap.min.js"></script>
+    <script src="/static/main/bootstrap.bundle.min.js"></script>
+    <!-- JQuery CDN -->
+    <script src="/static/main/jquery.min.js"></script>
+    <script src="/static/main/jquery.cookie.min.js"></script>
+    <!-- ReactJS CDN -->
+    <script src="/static/main/babel.min.js"></script>
+    <script src="/static/main/react.production.min.js"></script>
+    <script src="/static/main/react-dom.production.min.js"></script>
+    <script src="/static/main/react-bootstrap.min.js"></script>
+    <!-- Datatable CDN -->
+    <script src="/static/main/jquery.dataTables.min.js"></script>
+    <!-- Datatable Persian Language -->
+    <script src="/static/main/fa.json"></script>
+    <!-- Datatable Excel Export -->
+    <script src="/static/main/jszip.min.js"></script>
+    <!-- Datatable Buttons -->
+    <script src="/static/main/dataTables.buttons.min.js"></script>
+    <script src="/static/main/buttons.html5.min.js"></script>
+    <script src="/static/main/buttons.print.min.js"></script>
+    <!-- Main -->
+    <script type="text/babel" src="/static/main/components/Users.jsx"></script>
+    <script type="text/babel" src="/static/main/components/Groups.jsx"></script>
+    <script type="text/babel" src="/static/main/components/Requests.jsx"></script>
+    <script type="text/babel" src="/static/main/components/Evaluations.jsx"></script>
+    <!-- Config -->
+    <script src="/static/main/config.js"></script>
+</head>
+<body class="bg-primary">
+    <div class="row m-1">
+        <div class="col-sm-2 m-1 p-1 bg-light rounded">
+            <h2 class="text-center p-2 m-2">سامانه داخلی</h2>
+            <div class="list-group">
+                {% if request.user.is_superuser %}<button class="list-group-item list-group-item-action active" data-bs-toggle="tab" data-bs-target="#Requests">درخواست های جاری</button>{% endif %}
+                <button class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#Evaluations">درخواست های ارزیابی</button>
+                <button class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#Users">مدیریت کاربران</button>
+                <button class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#Groups">مدیریت گروه ها</button>
+                <a class="list-group-item list-group-item-action" href="/logout">خروج</a>
+            </div>
+        </div>
+        <div class="col tab-content m-1 p-1 bg-light rounded">
+            <div class="tab-pane fade show active" id="Requests"></div>
+            <div class="tab-pane fade" id="Evaluations"></div>
+            <div class="tab-pane fade" id="Users"></div>
+            <div class="tab-pane fade" id="Groups"></div>
+        </div>
+    </div>
+</body>
+</html>

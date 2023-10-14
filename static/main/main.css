@@ -1,0 +1,8 @@
+@font-face {
+    font-family: IranYekan;
+    src: url(/static/main/iranyekan.ttf);
+}
+
+body {
+    font-family: IranYekan;
+}

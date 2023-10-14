@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرم ارزیابی شماره {{ evaluation.id }}</title>
+    <link rel="stylesheet" href="/static/main/bootstrap.rtl.min.css">
+</head>
+<body>
+    <table class="table table-bordered">
+        <tr>
+            <td>نام: {{ evaluation.request.name }}</td>
+            <td>نوع: {{ evaluation.request.type }}</td>
+        </tr>
+        <tr>
+            <td>رسانه: {{ evaluation.request.media }}</td>
+            <td>ژانر: {{ evaluation.request.genre }}</td>
+        </tr>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>شاخص</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for parent in evaluation.indicators %}
+            <tr>
+                <td>{{ parent.name }}</td>
+                <td>
+                    {% for child in parent.items %}
+                    <div class="row">
+                        <div class="col-sm">
+                            {{ child.name }}
+                        </div>
+                        <div class="col">
+                            سطح: {{ child.level1 }} {{ child.level2 }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
