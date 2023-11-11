@@ -22,7 +22,7 @@ const Login = () => {
 
     return (
         <div class="col-lg-4 rounded bg-light shadow mx-lg-auto m-2 p-1">
-            <h2 class="text-center m-2">ورود به حساب</h2>
+            <h2 class="text-center m-2">ورود به سامانه</h2>
             {message ? <p class="alert alert-secondary">{message}</p>: null}
             <div class="m-1">
                 <label class="form-label" for="username">نام کاربری:</label>

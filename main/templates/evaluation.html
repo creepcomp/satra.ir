@@ -1,3 +1,5 @@
+{% load index %}
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -5,43 +7,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فرم ارزیابی شماره {{ evaluation.id }}</title>
     <link rel="stylesheet" href="/static/main/bootstrap.rtl.min.css">
+    <style>
+        body {
+            width: 210mm;
+        }
+        @media print {
+            body {
+                width: auto;
+            }
+        }
+    </style>
 </head>
-<body>
-    <table class="table table-bordered">
-        <tr>
-            <td>نام: {{ evaluation.request.name }}</td>
-            <td>نوع: {{ evaluation.request.type }}</td>
-        </tr>
-        <tr>
-            <td>رسانه: {{ evaluation.request.media }}</td>
-            <td>ژانر: {{ evaluation.request.genre }}</td>
-        </tr>
-    </table>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <td>شاخص</td>
-            </tr>
-        </thead>
-        <tbody>
-            {% for parent in evaluation.indicators %}
-            <tr>
-                <td>{{ parent.name }}</td>
-                <td>
-                    {% for child in parent.items %}
-                    <div class="row">
-                        <div class="col-sm">
-                            {{ child.name }}
-                        </div>
-                        <div class="col">
-                            سطح: {{ child.level1 }} {{ child.level2 }}
-                        </div>
-                    </div>
+<body class="mx-auto m-1">
+    <h2 class="text-center border p-2">فرم ارزیابی شماره {{ evaluation.id }}</h2>
+    <ol>
+        <li>
+            <label>اطلاعات اثر:</label>
+            <table class="table table-bordered">
+                <tr>
+                    <td>نام اثر: {{ evaluation.request.name }}</td>
+                    <td>نوع اثر: {{ config.choices.request.type|index:evaluation.request.type }}</td>
+                    <td>رسانه: {{ config.choices.request.media|index:evaluation.request.media }}</td>
+                    <td>ژانر: {{ config.choices.request.genre|index:evaluation.request.genre }}</td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            <label>ملاحضات محتوایی پایه:</label>
+            <table class="table table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <td>شاخص</td>
+                        <td>زیر شاخص</td>
+                        <td>سطح</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for parent in evaluation.indicators %}
+                    <tr>
+                        <td rowspan="{{ parent.childs|length|add:1 }}">{{ parent.name }}</td>
+                    </tr>
+                    {% for child in parent.childs %}
+                    <tr>
+                        <td>{{ child.name }}</td>
+                        <td>{{ config.choices.evaluation.indicators.level|index:child.level }}</td>
+                    </tr>
                     {% endfor %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </li>
+        <li>
+            <label>خلاصه یک خطی:</label>
+            <div class="border">
+                <p class="p-1">{{ evaluation.summary }}</p>
+            </div>
+        </li>
+        <li>
+            <label>خلاصه یک خطی:</label>
+            <div class="border">
+                <p class="p-1">{{ evaluation.summary }}</p>
+            </div>
+        </li>
+        <li>
+            <label>کلید واژه ها:</label>
+            <div class="border">
+                <p class="p-1">{{ evaluation.keywords }}</p>
+            </div>
+        </li>
+        <li>
+            <label>خلاصه کلی:</label>
+            <div class="border">
+                <p class="p-1">{{ evaluation.description }}</p>
+            </div>
+        </li>
+        <li>
+            <label>نتیجه گیری:</label>
+            <table class="table table-bordered">
+                <tr>
+                    <td>وضعیت</td>
+                    <td>{{ config.choices.evaluation.status|index:evaluation.status }}</td>
+                </tr>
+            </table>
+        </li>
+    </ol>
 </body>
 </html>

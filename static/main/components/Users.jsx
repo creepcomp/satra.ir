@@ -3,66 +3,71 @@ const Users = () => {
     const [user, setUser] = React.useState({})
     const [show, setShow] = React.useState(false)
 
-    React.useEffect(() => {
+    const update = () => {
         $.ajax({
-            url: "/api/get_users",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            success: (data) => {
-                setUsers(data.users)
-            }
-        })
-    }, [])
-
-    const init = () => {
-        setUser({})
+            url: "/api/users/",
+            success: data => setUsers(data)
+        });
     }
 
-    const edit = (id) => {
+    React.useEffect(update, []);
+
+    const edit = url => {
         $.ajax({
-            url: "/api/get_user",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: JSON.stringify({id: id}),
-            success: (data) => {
-                setUser(data.user)
+            url: url,
+            success: data => {
+                setUser(data)
                 setShow(true)
             }
         })
     }
 
-    const _delete = (id) => {
+    const _delete = url => {
         $.ajax({
-            url: "/api/delete_user",
-            method: "POST",
+            url: url,
+            method: "DELETE",
             headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: JSON.stringify({id: id}),
-            success: (data) => {
-                setUsers(data.users)
-            }
+            success: update
         })
     }
 
     const save = () => {
-        $.ajax({
-            url: "/api/save_user",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: JSON.stringify(user),
-            success: (data) => {
-                setUsers(data.users)
-                setShow(false)
-            }
-        })
+        if (user.url) {
+            $.ajax({
+                url: user.url,
+                method: "PUT",
+                headers: {"X-CSRFToken": $.cookie("csrftoken")},
+                contentType: "application/json",
+                data: JSON.stringify(user),
+                success: () => {
+                    setUser({})
+                    setShow(false)
+                    update()
+                }
+            })
+        } else {
+            $.ajax({
+                url: "/api/users/",
+                method: "POST",
+                headers: {"X-CSRFToken": $.cookie("csrftoken")},
+                contentType: "application/json",
+                data: JSON.stringify(user),
+                success: () => {
+                    setUser({})
+                    setShow(false)
+                    update()
+                }
+            })
+        }
     }
 
-    const changeHandler = (e) => {
+    const changeHandler = e => {
         setUser({...user, [e.target.name]: e.target.value})
     }
 
     return (
         <>
-            <table class="table align-middle">
+            <table className="table align-middle">
                 <thead>
                     <tr>
                         <td>#</td>
@@ -73,70 +78,64 @@ const Users = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user, index) => (
+                    {users.map(user => (
                         <tr>
-                            <td>{index + 1}</td>
+                            <td>{user.id}</td>
                             <td>{user.username}</td>
                             <td>{user.first_name} {user.last_name}</td>
                             <td>
-                                {user.groups.map(group => <span class="bg-primary rounded m-1 p-1 text-light">{config.groups.find(x => x.id == group).name}</span>)}
+                                {user.groups.map(x => <span className="bg-primary rounded m-1 p-1 text-light">{x.name}</span>)}
                             </td>
                             <td>
-                                <button class="btn btn-secondary m-1" onClick={() => edit(user.id)}>
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="btn btn-danger m-1" onClick={() => _delete(user.id)}>
-                                    <i class="fa-solid fa-xmark"></i>
-                                </button>
+                                <button className="btn btn-secondary m-1" onClick={() => edit(user.url)}><i className="fa-solid fa-pen-to-square"></i></button>
+                                <button className="btn btn-danger m-1" onClick={() => _delete(user.url)}><i className="fa-solid fa-xmark"></i></button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
             <ReactBootstrap.Modal show={show} size="lg">
-                <div class="modal-header">
+                <div className="modal-header">
                     <h5>اضافه/ویرایش کردن</h5>
-                    <button type="button" class="btn-close" onClick={() => setShow(false)}></button>
+                    <button type="button" className="btn-close" onClick={() => setShow(false)}></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm">
-                            <label class="form-label" for="username">نام کاربری:</label>
-                            <input class="form-control" type="text" name="username" id="username" value={user.username} onChange={changeHandler} />
+                <div className="modal-body">
+                    <div className="row">
+                        <div className="col-sm">
+                            <label className="form-label" for="username">نام کاربری:</label>
+                            <input className="form-control" type="text" name="username" id="username" value={user.username} onChange={changeHandler} />
                         </div>
-                        <div class="col">
-                            <label class="form-label" for="password">رمز عبور</label>
-                            <input class="form-control" type="password" name="password" id="password" value={user.password} onChange={changeHandler} />
+                        <div className="col">
+                            <label className="form-label" for="password">رمز عبور</label>
+                            <input className="form-control" type="password" name="password" id="password" value={user.password} onChange={changeHandler} />
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm">
-                            <label class="form-label" for="first_name">نام:</label>
-                            <input class="form-control" type="text" name="first_name" id="first_name" value={user.first_name} onChange={changeHandler} />
+                    <div className="row">
+                        <div className="col-sm">
+                            <label className="form-label" for="first_name">نام:</label>
+                            <input className="form-control" type="text" name="first_name" id="first_name" value={user.first_name} onChange={changeHandler} />
                         </div>
-                        <div class="col">
-                            <label class="form-label" for="last_name">نام خانوادگی:</label>
-                            <input class="form-control" type="text" name="last_name" id="last_name" value={user.last_name} onChange={changeHandler} />
+                        <div className="col">
+                            <label className="form-label" for="last_name">نام خانوادگی:</label>
+                            <input className="form-control" type="text" name="last_name" id="last_name" value={user.last_name} onChange={changeHandler} />
                         </div>
                     </div>
                     <label for="groups">گروه ها:</label>
-                    <select class="form-select" name="groups" id="groups" value={user.groups} onChange={(e) => setUser({...user, [e.target.name]: $(e.target).val()})} multiple>
-                        {config.groups.map((g) => <option value={g.id}>{g.name}</option>)}
+                    <select className="form-select" name="groups" id="groups" value={user.groups} onChange={e => setUser({...user, [e.target.name]: $(e.target).val()})} multiple>
+                        {groups.map(x => <option value={x.id}>{x.name}</option>)}
                     </select>
-                    <div class="alert alert-danger m-1 p-2">
-                        <input class="form-check-input me-2" type="checkbox" name="is_superuser" id="is_superuser" checked={user.is_superuser} onChange={e => setUser({...user, is_superuser: e.target.checked})} />
-                        <label class="form-check-label" for="is_superuser">کاربر فوق العاده (ادمین)</label>
+                    <div className="alert alert-danger m-1 p-2">
+                        <input className="form-check-input me-2" type="checkbox" name="is_superuser" id="is_superuser" checked={user.is_superuser} onChange={e => setUser({...user, is_superuser: e.target.checked})} />
+                        <label className="form-check-label" for="is_staff">کاربر فوق العاده (ادمین)</label>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" onClick={save}>ذخیره</button>
+                <div className="modal-footer">
+                    <button className="btn btn-primary" onClick={save}>ذخیره</button>
                 </div>
             </ReactBootstrap.Modal>
-            <button class="btn btn-light position-absolute bottom-0 end-0 m-1 p-2" onClick={() => {setShow(true); init()}} >
-                <i class="fa-solid fa-plus"></i>
-            </button>
+            <button className="btn btn-light position-absolute bottom-0 end-0 m-1 p-2" onClick={() => setShow(true)} ><i className="fa-solid fa-plus"></i></button>
         </>
     )
 }
 
-ReactDOM.render(<Users />, document.getElementById("Users"))
+ReactDOM.render(<Users />, document.getElementById("app"))

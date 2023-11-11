@@ -1,0 +1,677 @@
+[
+    {
+        "name": "خشونت",
+        "childs": [
+            {
+                "name": "خودکشی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ضرب‌وشتم",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "جراحت، خون‌ریزی و سوختن",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "قطع‌شدن اعضای بدن و شکسته‌شدن استخوان",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "قتل",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "آزار و شکنجه",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "وحشت",
+        "childs": [
+            {
+                "name": "موقعیت ترسناک",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "موجودات و شخصیت‌های ترسناک",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "موسیقی و اصوات ‌دلهره‌آور",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "پریشانی و رنج شدید در مخاطب",
+        "childs": [
+            {
+                "name": "موقعیت‌ غمناک و یأس‌آور",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "محتوای اروتیک",
+        "childs": [
+            {
+                "name": "رفتار اروتیک",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "گفتار اروتیک",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "ناهنجاری‌ها و انحراف‌های جنسی",
+        "childs": [
+            {
+                "name": "زنا با غیرمحارم",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "زنا با محارم",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "بی‌بندوباری جنسی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "تجاوز جنسی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "تعرّض جنسی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "سوء استفادۀ جنسی از کودکان",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "بردگی جنسی، فتیشیسم و...",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "هم‌جنس‌گرایی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "تراجنسیتی، دوجنسیتی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "خود ارضایی",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "آسیب به ارزش‌های نهاد خانواده",
+        "childs": [
+            {
+                "name": "روابط چندضلعی عاشقانه (پیش از ازدواج)",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "روابط چندضلعی عاشقانه (پس از ازدواج)",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ازدواج سفید",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "شوگرددی و شوگرمامی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج مدل نامناسب خانواده",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "بازنمایی منفی و سیاه از خانوادۀ ایرانی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "تحقیر خانواده",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "بی‌عفتی، بی‌غیرتی و بی‌حیایی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "بازنمایی مثبت از طلاق",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "بازنمایی مثبت از تجرّد",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "بی‌احترامی به والدین",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "اختلافات خانوادگی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "خشونت خانگی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج زندگی با حیوانات خانگی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "روابط خاص محرم و نامحرم",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "پوشش و آرایش",
+        "childs": [
+            {
+                "name": "عدم رعایت حجاب شرعی زنان",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "لباس نامناسب",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "آشکارشدن اعضای بدن زنان",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "آشکارشدن اعضای بدن مردان",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "آرایش غلیظ",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "خال‌کوبی",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "آسیب‌های اعتقادی",
+        "childs": [
+            {
+                "name": "انکار خداوند",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "انکار ادیان الهی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "انکار اعتقادات دینی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "توهین به مقدّسات اسلامی و سایر ادیان",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج افکار و فرقه‌های انحرافی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "تشکیک در احکام دین",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج و تطهیر گناهان",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "بازنمایی منفی از نهادها و نمادهای دینی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "انکار وجود خود و جهان خارج",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج نسبیت‌گرایی اخلاقی و شناختی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "تصویر نادرست از آخرالزمان و پایان دنیا",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج معنویت غیردینی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج لذت‌گرایی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج پوچ‌گرایی",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "ترویج تعصب نژادی، قومی و جنسیتی",
+        "childs": [
+            {
+                "name": "برتری‌دادن یک قوم یا یک فرهنگ",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج خصومت و نفرت‌پراکنی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج برتری مرد یا زن",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج مردستیزی یا زن‌ستیزی",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "بی‌ادبی",
+        "childs": [
+            {
+                "name": "رفتار بی‌ادبانه",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "بدزبانی",
+        "childs": [
+            {
+                "name": "ناسزا گویی یا واژگان رکیک",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ارجاعات جنسی غیرشهوانی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "آسیب به زبان فارسی معیار",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "اشمئزاز",
+        "childs": [
+            {
+                "name": "رفتار مشمئزکننده",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "الکل، مواد مخدر و قمار",
+        "childs": [
+            {
+                "name": "مجالس شرب خمر",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "مشروبات الکلی، ظروف، سِرو و...",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "حالات مستی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "مواد مخدر و ابزارآلات مصرف آن",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "مصرف مواد مخدر",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "سیگار",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "قماربازی و کازینو",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "موسیقی و رقص",
+        "childs": [
+            {
+                "name": "موسیقی لهوی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "کنسرت نامناسب",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "رقص زن یا رقص مختلط",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "رقص فردی یا گروهی مردان",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "آسیب به ارزش‌های ملی و انقلابی و...",
+        "childs": [
+            {
+                "name": "تحقیر دستاوردهای ملی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "تحریف یا بازنمایی منفی انقلاب و دفاع مقدس",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "توهین به مقدسات نظام",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج گروه‌های معارض",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج وابستگی به کشورهای بیگانه",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "تضعیف نهادهای انقلابی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج قانون‌شکنی و هنجارشکنی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "آموزش تکنیک‌های بزه و جنایت",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "نقض حریم خصوصی",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "ترویج ارزش‌های اخلاقی",
+        "childs": [
+            {
+                "name": "ترویج امید",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ترویج کار و تلاش",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "حیا و عفت",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "صداقت",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "کرامت انسانی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "وفای به عهد",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "جوانمردی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "امانت‌داری",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "رحم و مهربانی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ادب و احترام",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "انصاف و عدالت",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "پایبندی به اعتقادات و احکام دین",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "ساده‌زیستی و قناعت",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "سایر ارزش‌های اخلاقی",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "ترویج ارزشهای ملی و انقلابی",
+        "childs": [
+            {
+                "name": "ازدواج آسان و بهنگام",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "فرزندآوری",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "خانواده‌مداری",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "حس مسئولیت و مشارکت اجتماعی و سیاسی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "قانون‌مداری",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "دشمن‌شناسی و بصیرت",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "اقتصاد مقاومتی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "میهن‌دوستی",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "نقد سازندۀ اجتماعی و سیاسی",
+        "childs": [
+            {
+                "name": "نقد سازندۀ اجتماعی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "نقد سازندۀ سیاسی",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    },
+    {
+        "name": "ارائۀ الگوهای مثبت اسلامی - ایرانی",
+        "childs": [
+            {
+                "name": "الگوهای جهاد علمی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "الگوهای عرصۀ دفاع مقدس و ایثارگری",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "الگوهای جهاد اقتصادی، تولید و کارآفرینی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "الگوهای عرصۀ مدیریت",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "الگوهای اخلاقی - تربیتی",
+                "level": 0,
+                "description": ""
+            },
+            {
+                "name": "سایر الگوها",
+                "level": 0,
+                "description": ""
+            }
+        ]
+    }
+]

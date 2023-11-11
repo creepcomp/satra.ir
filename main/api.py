@@ -55,7 +55,10 @@ def get_evaluation(request):
 
 def get_evaluations(request):
     data = json.loads(request.body or "{}")
-    evaluations = Evaluation.objects.filter(**data)
+    if "ارزیاب" in [x.name for x in request.user.groups.all()]:
+        evaluations = Evaluation.objects.filter(evaluator=request.user, status=0, **data)
+    else:
+        evaluations = Evaluation.objects.filter(**data)
     evaluations = EvaluationSerializer(evaluations, many=True)
     return JsonResponse({"status": "success", "evaluations": evaluations.data})
 

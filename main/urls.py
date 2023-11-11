@@ -1,9 +1,20 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views, api
+from .views import RequestViewSet, EvaluationViewSet
+
+router = DefaultRouter()
+router.register("requests", RequestViewSet)
+router.register("evaluations", EvaluationViewSet)
 
 urlpatterns = [
+    path("api/", include(router.urls)),
     path("", views.index),
+    path("requests", views.requests),
+    path("presence", views.presence),
+    path("evaluations", views.evaluations),
     path("evaluation", views.evaluation),
+    path("users", views.users),
     path("api/get_request", api.get_request),
     path("api/get_requests", api.get_requests),
     path("api/save_request", api.save_request),

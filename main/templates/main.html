@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ساترا - سامانه داخلی</title>
+    <title>سامانه داخلی</title>
 
     <link rel="stylesheet" href="/static/main/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -30,31 +30,34 @@
     <script src="/static/main/dataTables.buttons.min.js"></script>
     <script src="/static/main/buttons.html5.min.js"></script>
     <script src="/static/main/buttons.print.min.js"></script>
-    <!-- Main -->
-    <script type="text/babel" src="/static/main/components/Users.jsx"></script>
-    <script type="text/babel" src="/static/main/components/Groups.jsx"></script>
-    <script type="text/babel" src="/static/main/components/Requests.jsx"></script>
-    <script type="text/babel" src="/static/main/components/Evaluations.jsx"></script>
+    <!-- Jalali DatePicker -->
+    <link rel="stylesheet" href="/static/main/jalalidatepicker.min.css">
+    <script type="text/javascript" src="/static/main/jalalidatepicker.min.js"></script>
     <!-- Config -->
+    <script>
+        var config = {{ config|safe }};
+    </script>
     <script src="/static/main/config.js"></script>
+    {% block head %}{% endblock %}
 </head>
 <body class="bg-primary">
     <div class="row m-1">
         <div class="col-sm-2 m-1 p-1 bg-light rounded">
-            <h2 class="text-center p-2 m-2">سامانه داخلی</h2>
+            <div class="text-center m-2">
+                <h2>سامانه داخلی</h2>
+                <div>کاربر: {{ request.user.first_name }} {{ request.user.last_name }}</div>
+                <div>گروه: {% for group in request.user.groups.all %}<span class="bg-primary text-light rounded m-1 px-1">{{ group.name }}</span>{% endfor %}</div>
+            </div>
             <div class="list-group">
-                {% if request.user.is_superuser %}<button class="list-group-item list-group-item-action active" data-bs-toggle="tab" data-bs-target="#Requests">درخواست های جاری</button>{% endif %}
-                <button class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#Evaluations">درخواست های ارزیابی</button>
-                <button class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#Users">مدیریت کاربران</button>
-                <button class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#Groups">مدیریت گروه ها</button>
+                {% if request.user.is_superuser %}<a class="list-group-item list-group-item-action {% if request.path == '/requests'%}active{% endif %}" href="/requests">درخواست های جاری</a>{% endif %}
+                <a class="list-group-item list-group-item-action {% if request.path == '/evaluations'%}active{% endif %}" href="/evaluations">درخواست های ارزیابی</a>
+                {% if request.user.is_superuser %}<a class="list-group-item list-group-item-action {% if request.path == '/presence'%}active{% endif %}" href="/presence">حضور غیاب کارگروه / شورا</a>{% endif %}
+                {% if request.user.is_superuser %}<a class="list-group-item list-group-item-action {% if request.path == '/users'%}active{% endif %}" href="/users">مدیریت کاربران</a>{% endif %}
                 <a class="list-group-item list-group-item-action" href="/logout">خروج</a>
             </div>
         </div>
-        <div class="col tab-content m-1 p-1 bg-light rounded">
-            <div class="tab-pane fade show active" id="Requests"></div>
-            <div class="tab-pane fade" id="Evaluations"></div>
-            <div class="tab-pane fade" id="Users"></div>
-            <div class="tab-pane fade" id="Groups"></div>
+        <div class="col m-1 p-1 bg-light rounded">
+            {% block sidepanel %}{% endblock %}
         </div>
     </div>
 </body>
