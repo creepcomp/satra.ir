@@ -1,17 +1,13 @@
-from rest_framework.serializers import HyperlinkedModelSerializer, CurrentUserDefault
+from rest_framework.serializers import ModelSerializer
 from .models import Request, Evaluation
-from account.serializers import UserSerializer
 
-class EvaluationSerializer(HyperlinkedModelSerializer):
-    evaluator = UserSerializer()
-    created_by = UserSerializer()
-    class Meta:
-        model = Evaluation
-        fields = "__all__"
-
-class RequestSerializer(HyperlinkedModelSerializer):
-    created_by = UserSerializer()
-    evaluations = EvaluationSerializer(many=True)
+class RequestSerializer(ModelSerializer):
     class Meta:
         model = Request
+        fields = "__all__"
+
+class EvaluationSerializer(ModelSerializer):
+    request = RequestSerializer(read_only=True)
+    class Meta:
+        model = Evaluation
         fields = "__all__"

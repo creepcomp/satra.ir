@@ -1,14 +1,19 @@
-from rest_framework.serializers import HyperlinkedModelSerializer
-from account.models import User
-from django.contrib.auth.models import Group
+from rest_framework.serializers import ModelSerializer
+from django.contrib.auth.models import User, Group
 
-class GroupSerializer(HyperlinkedModelSerializer):
+class GroupSerializer(ModelSerializer):
     class Meta:
         model = Group
-        fields = ["url", "name"]
+        fields = "__all__"
 
-class UserSerializer(HyperlinkedModelSerializer):
-    groups = GroupSerializer(many=True)
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["url", "username", "first_name", "last_name", "password", "groups", "is_staff"]
+        fields = "__all__"
+    
+    def update(self, instance, validated_data):
+        if validated_data.get("password"):
+            print("OK")
+            instance.set_password(validated_data.get("password"))
+            validated_data.pop("password")
+        return super().update(instance, validated_data)

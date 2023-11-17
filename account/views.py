@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as _logout
-from account.models import User
+from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser

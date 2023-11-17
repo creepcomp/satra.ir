@@ -1,6 +1,6 @@
 const Evaluations = () => {
-    const [evaluations, setEvaluations] = React.useState([]);
     const queryParameters = new URLSearchParams(window.location.search);
+    const [evaluations, setEvaluations] = React.useState([]);
     const [evaluation, setEvaluation] = React.useState({
         request: {},
         created_by: {},
@@ -8,44 +8,38 @@ const Evaluations = () => {
     });
     const [show, setShow] = React.useState(false);
 
-    React.useEffect(() => {
+    const update = () => {
         $.ajax({
-            url: "/api/get_evaluations",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            success: data => {
-                setEvaluations(data.evaluations)
-            }
+            url: "/api/evaluations/",
+            success: setEvaluations
         })
+    }
+
+    React.useEffect(() => {
+        update()
         const evaluation_id = queryParameters.get("id")
         if (evaluation_id) edit(evaluation_id)
     }, [])
 
     const save = () => {
-        const e = {...evaluation}
-        delete e.request
-        delete e.created_by
-        delete e.evaluator
         $.ajax({
-            url: "/api/save_evaluation",
-            method: "POST",
+            url: `/api/evaluations/${evaluation.id}/`,
+            method: "PUT",
             headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: JSON.stringify(e),
+            contentType: "application/json",
+            data: JSON.stringify(evaluation),
             success: data => {
-                setEvaluations(data.evaluations)
                 setShow(false)
+                update()
             }
         })
     }
 
     const edit = id => {
         $.ajax({
-            url: "/api/get_evaluation",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: JSON.stringify({id: id}),
+            url: `/api/evaluations/${id}/`,
             success: data => {
-                setEvaluation(data.evaluation)
+                setEvaluation(data)
                 setShow(true)
             }
         })
@@ -53,14 +47,10 @@ const Evaluations = () => {
 
     const _delete = id => {
         $.ajax({
-            url: "/api/delete_evaluation",
-            method: "POST",
+            url: `/api/evaluations${id}`,
+            method: "DELETE",
             headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: JSON.stringify({id: id}),
-            dataType: "json",
-            success: data => {
-                setEvaluations(data.evaluations)
-            }
+            success: update
         })
     }
 
@@ -123,7 +113,7 @@ const Evaluations = () => {
                             <tr>
                                 <td>رده سنی: {config.choices.request.ages[evaluation.request.ages]}</td>
                                 <td>رسانه: {config.choices.request.media[evaluation.request.media]}</td>
-                                <td>فایل اثر: {evaluation.request.file ? <a className="btn bg-primary text-light" dir="ltr" href={"/media/" + evaluation.request.file}>{evaluation.request.file}</a>: null}</td>
+                                <td>فایل اثر: {evaluation.request.file ? <a className="btn bg-primary text-light p-1" dir="ltr" href={"/media/" + evaluation.request.file}>{evaluation.request.file}</a>: null}</td>
                             </tr>
                             <tr>
                                 <td>نویسنده: {evaluation.request.author}</td>

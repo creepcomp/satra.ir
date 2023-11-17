@@ -84,7 +84,7 @@ const Users = () => {
                             <td>{user.username}</td>
                             <td>{user.first_name} {user.last_name}</td>
                             <td>
-                                {user.groups.map(x => <span className="bg-primary rounded m-1 p-1 text-light">{x.name}</span>)}
+                                {user.groups.map(url => <span className="bg-primary rounded m-1 p-1 text-light">{get_group(url).name}</span>)}
                             </td>
                             <td>
                                 <button className="btn btn-secondary m-1" onClick={() => edit(user.url)}><i className="fa-solid fa-pen-to-square"></i></button>
@@ -122,7 +122,7 @@ const Users = () => {
                     </div>
                     <label for="groups">گروه ها:</label>
                     <select className="form-select" name="groups" id="groups" value={user.groups} onChange={e => setUser({...user, [e.target.name]: $(e.target).val()})} multiple>
-                        {groups.map(x => <option value={x.id}>{x.name}</option>)}
+                        {groups.map(x => <option value={x.url}>{x.name}</option>)}
                     </select>
                     <div className="alert alert-danger m-1 p-2">
                         <input className="form-check-input me-2" type="checkbox" name="is_superuser" id="is_superuser" checked={user.is_superuser} onChange={e => setUser({...user, is_superuser: e.target.checked})} />

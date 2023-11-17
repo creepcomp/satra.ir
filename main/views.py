@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .models import Request, Evaluation
@@ -10,6 +11,15 @@ class RequestViewSet(ModelViewSet):
     queryset = Request.objects.all()
     serializer_class = RequestSerializer
     permission_classes = [IsAdminUser]
+    
+    def get_queryset(self):
+        params = self.request.query_params
+        if params:
+            request = Request.objects.filter()
+            for key, value in params.items():
+                setattr(request, f"{key}__contains", value)
+            return request
+        return super().get_queryset()
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)

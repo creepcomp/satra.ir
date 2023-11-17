@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login as _login
-from account.models import User
+from django.contrib.auth.models import User
 from .serializers import UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 

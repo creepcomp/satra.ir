@@ -19,13 +19,9 @@ const WorkingGroupReport = () => {
         if (input.current.working_group_users.value)
             params.working_group_users__contains = $(input.current.working_group_users).val();
         $.ajax({
-            url: "/api/get_requests",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
+            url: "/api/requests/",
             data: JSON.stringify(params),
-            success: data => {
-                setRequests(data.requests)
-            }
+            success: data => setRequests(data)
         })
     }
 
@@ -48,7 +44,7 @@ const WorkingGroupReport = () => {
                             </td>
                             <td>
                                 <ul className="m-0">
-                                    {r.working_group_users.map(u => <li>{get_user(u).first_name + " " + get_user(u).last_name}</li>)}
+                                    {r.working_group_users.map(id => <li>{get_user_from_id(id).first_name + " " + get_user_from_id(id).last_name}</li>)}
                                 </ul>
                             </td>
                             <td>{r.working_group_at}</td>

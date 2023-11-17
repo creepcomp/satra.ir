@@ -11,13 +11,10 @@ $.ajax({
     success: (data) => groups = data
 });
 
-const get_user = id => {
-    return users.find(x => x.id == id);
-}
+const get_user = id => users.find(x => x.id == id);
+const get_group = id => groups.find(x => x.id == id);
 
 const get_group_users = name => {
-    const group = groups.find(g => g.name == name);
-    if (group) {
-        return users.filter(u => u.groups.includes(group));
-    }
+    group = groups.find(x => x.name == name)
+    return users.filter(x => x.groups.find(y => y == group.id))
 }

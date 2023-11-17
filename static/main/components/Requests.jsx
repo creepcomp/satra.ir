@@ -3,7 +3,6 @@ const Requests = () => {
     const [requests, setRequests] = React.useState([])
     const [show, setShow] = React.useState(false)
     const [request, setRequest] = React.useState({})
-    const [evaluations, setEvaluations] = React.useState([])
 
     const update = () => {
         $.ajax({
@@ -55,19 +54,16 @@ const Requests = () => {
         })
     }
 
-    const edit = url => {
+    const edit = id => {
         $.ajax({
-            url: url,
-            success: data => {
-                setRequest(data)
-                setShow(true)
-            }
+            url: `/api/requests/${id}/`,
+            success: data => {setRequest(data); setShow(true)}
         })
     }
 
-    const _delete = url => {
+    const _delete = id => {
         $.ajax({
-            url: url,
+            url: `/api/requests/${id}/`,
             method: "DELETE",
             headers: {"X-CSRFToken": $.cookie("csrftoken")},
             success: update
@@ -75,9 +71,9 @@ const Requests = () => {
     }
 
     const save = () => {
-        if (request.url) {
+        if (request.id) {
             $.ajax({
-                url: request.url,
+                url: `/api/requests/${request.id}/`,
                 method: "PUT",
                 headers: {"X-CSRFToken": $.cookie("csrftoken")},
                 contentType: "application/json",
@@ -113,54 +109,10 @@ const Requests = () => {
             url: "/api/upload",
             method: "POST",
             headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: formData,
             processData: false,
             contentType: false,
+            data: formData,
             success: data => setRequest({...request, file: data.file})
-        })
-    }
-
-    const upload_files = e => {
-        const formData = new FormData()
-        Array.from(e.target.files).forEach(file => {
-            formData.append(file.name, file)
-        });
-        $.ajax({
-            url: "/api/upload_files",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: data => {
-                if (request.files)
-                    request.files.push(data.files)
-                else request.files = data.files
-                setRequest({...request, files: request.files})
-            }
-        })
-    }
-
-    const create_evaluation = () => {
-        $.ajax({
-            url: "/api/evaluations/",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            contentType: "json",
-            data: JSON.stringify({request: request.id, evaluator: $("#evaluators").val(), note: $("#note").val()}),
-            success: update()
-        })
-    }
-
-    const delete_evaluation = id => {
-        $.ajax({
-            url: "/api/delete_evaluation",
-            method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
-            data: JSON.stringify({request_id: request.id, id: id}),
-            success: data => {
-                setEvaluations(data.evaluations)
-            }
         })
     }
 
@@ -189,7 +141,7 @@ const Requests = () => {
                             <tr>
                                 <td>{index + 1}</td>
                                 <td>
-                                    <button className="btn" onClick={() => edit(request.url)}>
+                                    <button className="btn" onClick={() => edit(request.id)}>
                                         {request.name}
                                     </button>
                                 </td>
@@ -204,8 +156,8 @@ const Requests = () => {
                                 <td>{moment(request.created_at).format("YYYY-MM-DD")}</td>
                                 <td>{config.choices.request.status[request.status]}</td>
                                 <td>
-                                    <button className="btn btn-secondary m-1" onClick={() => edit(request.url)}><i className="fa-solid fa-pen-to-square"></i></button>
-                                    <button className="btn btn-danger m-1" onClick={() => _delete(request.url)}><i className="fa-solid fa-xmark"></i></button>
+                                    <button className="btn btn-secondary m-1" onClick={() => edit(request.id)}><i className="fa-solid fa-pen-to-square"></i></button>
+                                    <button className="btn btn-danger m-1" onClick={() => _delete(request.id)}><i className="fa-solid fa-xmark"></i></button>
                                 </td>
                             </tr>
                         )
@@ -381,48 +333,7 @@ const Requests = () => {
                             </div>
                         </div>
                         <div className="tab-pane fade" id="nav-evaluation">
-                            <table className="table align-middle">
-                                <thead>
-                                    <tr>
-                                        <td>#</td>
-                                        <td>ارزیاب</td>
-                                        <td>ارسال کننده</td>
-                                        <td>زمان ارسال</td>
-                                        <td>وضعیت</td>
-                                        <td>عملیات</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {evaluations.map(e => (
-                                        <tr>
-                                            <td>{e.id}</td>
-                                            <td>{e.evaluator.first_name} {e.evaluator.last_name} </td>
-                                            <td>{e.created_by.first_name} {e.created_by.last_name}</td>
-                                            <td>{moment(e.created_at).format("YYYY-MM-DD")}</td>
-                                            <td>{config.choices.evaluation.status[e.status]}</td>
-                                            <td>
-                                                <a className="btn btn-primary m-1" href={"/evaluation?id=" + e.id}><i className="fa-solid fa-print"></i></a>
-                                                <a className="btn btn-secondary m-1" href={"/evaluations?id=" + e.id}><i className="fa-solid fa-pen-to-square"></i></a>
-                                                <button className="btn btn-danger m-1" onClick={() => delete_evaluation(e.id)}><i className="fa-solid fa-xmark"></i></button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <div className="row">
-                                <div className="col-8">
-                                    <div className="form-group m-1">
-                                        <label className="form-label" for="evaluator">ارزیاب:</label>
-                                        <select className="form-select" name="evaluators" id="evaluators" multiple>
-                                            {get_group_users("ارزیاب").map(u => <option value={u.id}>{u.first_name} {u.last_name}</option>)}
-                                        </select>
-                                    </div>
-                                    <input className="form-control m-1" type="text" id="note" placeholder="یادداشت" />
-                                </div>
-                                <div className="col d-flex justify-content-center align-items-center">
-                                    <button className="btn btn-secondary" onClick={create_evaluation}>ارسال به ارزیاب</button>
-                                </div>
-                            </div>
+                            <Evaluations request={request.id} />
                         </div>
                         <div className="tab-pane fade" id="nav-considerations">
                             <div className="border rounded m-1 p-1">
@@ -471,7 +382,7 @@ const Requests = () => {
                                     )): null}
                                 </tbody>
                             </table>
-                            <input className="form-control" type="file" onChange={upload_files} multiple />
+                            <input className="form-control" type="file" multiple />
                         </div>
                     </div>
                 </div>
@@ -479,10 +390,92 @@ const Requests = () => {
                     <button className="btn btn-primary" onClick={save}>ذخیره</button>
                 </div>
             </ReactBootstrap.Modal>
-            <button className="btn btn-light position-absolute bottom-0 end-0 m-1 p-2" onClick={() => {setShow(true)}} >
+            <button className="btn btn-light position-absolute bottom-0 end-0 m-1 p-2" onClick={() => {setRequest({}); setShow(true)}} >
                 <i className="fa-solid fa-plus"></i>
             </button>
         </>
+    )
+}
+
+const Evaluations = props => {
+    const [evaluations, setEvaluations] = React.useState([])
+
+    const update = () => {
+        $.ajax({
+            url: `/api/evaluations?request=${props.request}`,
+            success: setEvaluations
+        })
+    }
+
+    React.useEffect(update, [])
+
+    const send = () => {
+        $("#evaluators").val().forEach(x => {
+            $.ajax({
+                url: `/api/evaluations/`,
+                method: "POST",
+                headers: {"X-CSRFToken": $.cookie("csrftoken")},
+                contentType: "application/json",
+                data: JSON.stringify({request: props.request, evaluator: x, note: $("#note").val() || null}),
+                success: update
+            })
+        })
+    }
+
+    const _delete = id => {
+        $.ajax({
+            url: `/api/evaluations/${id}/`,
+            method: "DELETE",
+            headers: {"X-CSRFToken": $.cookie("csrftoken")},
+            success: update
+        })
+    }
+
+    return (
+        <div>
+            <table className="table align-middle">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>ارزیاب</td>
+                        <td>ارسال کننده</td>
+                        <td>زمان ارسال</td>
+                        <td>وضعیت</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {evaluations.map(e => (
+                        <tr>
+                            <td>{e.id}</td>
+                            <td>{e.evaluator.first_name} {e.evaluator.last_name} </td>
+                            <td>{e.created_by.first_name} {e.created_by.last_name}</td>
+                            <td>{moment(e.created_at).format("YYYY-MM-DD")}</td>
+                            <td>{config.choices.evaluation.status[e.status]}</td>
+                            <td>
+                                <a className="btn btn-primary m-1" href={"/evaluation?id=" + e.id}><i className="fa-solid fa-print"></i></a>
+                                <a className="btn btn-secondary m-1" href={"/evaluations?id=" + e.id}><i className="fa-solid fa-pen-to-square"></i></a>
+                                <button className="btn btn-danger m-1" onClick={() => _delete(e.id)}><i className="fa-solid fa-xmark"></i></button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <div className="row">
+                <div className="col-8">
+                    <div className="form-group m-1">
+                        <label className="form-label" for="evaluator">ارزیاب:</label>
+                        <select className="form-select" name="evaluators" id="evaluators" multiple>
+                            {get_group_users("ارزیاب").map(x => <option value={x.id}>{x.first_name} {x.last_name}</option>)}
+                        </select>
+                    </div>
+                    <input className="form-control m-1" type="text" id="note" placeholder="یادداشت" />
+                </div>
+                <div className="col d-flex justify-content-center align-items-center">
+                    <button className="btn btn-secondary" onClick={send}>ارسال به ارزیاب</button>
+                </div>
+            </div>
+        </div>
     )
 }
 
