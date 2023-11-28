@@ -4,26 +4,28 @@ const Login = () => {
 
     const login = () => {
         $.ajax({
-            url: "/api/login",
+            url: "/api/users/login/",
             method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
+            headers: { "X-CSRFToken": $.cookie("csrftoken") },
+            contentType: "application/json",
             data: JSON.stringify(data),
-            success: (data) => {
-                if (data.status == "success")
-                    document.location = "/"
-                setMessage(data.message)
+            success: data => {
+                document.location = "/";
+            },
+            error: xhr => {
+                setMessage(JSON.parse(xhr.responseText).message);
             }
         })
     }
 
     const changeHandler = (e) => {
-        setData({...data, [e.target.name]: e.target.value})
+        setData({ ...data, [e.target.name]: e.target.value });
     }
 
     return (
         <div class="col-lg-4 rounded bg-light shadow mx-lg-auto m-2 p-1">
             <h2 class="text-center m-2">ورود به سامانه</h2>
-            {message ? <p class="alert alert-secondary">{message}</p>: null}
+            {message ? <p class="alert alert-secondary">{message}</p> : null}
             <div class="m-1">
                 <label class="form-label" for="username">نام کاربری:</label>
                 <input class="form-control" type="text" name="username" id="username" onChange={changeHandler} value={data.username} />

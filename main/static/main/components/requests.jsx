@@ -1,8 +1,9 @@
 const Requests = () => {
     const queryParameters = new URLSearchParams(window.location.search);
-    const [requests, setRequests] = React.useState([])
-    const [show, setShow] = React.useState(false)
-    const [request, setRequest] = React.useState({})
+    const [requests, setRequests] = React.useState([]);
+    const [show, setShow] = React.useState(false);
+    const [request, setRequest] = React.useState({});
+    const [error, setError] = React.useState({});
 
     const update = () => {
         $.ajax({
@@ -11,23 +12,9 @@ const Requests = () => {
                 $("#table").DataTable().destroy();
                 setRequests(data);
                 $("#table").DataTable({
-                    autoWidth: false,
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/fa.json',
-                    },
+                    language: { url: '/static/main/fa.json' },
                     dom: 'Bfrtip',
-                    buttons: [
-                        {
-                            extend: "csv",
-                            text: "دریافت اکسل (csv)"
-                        },
-                        {
-                            extend: "print",
-                            customize: doc => {
-                                $(doc.document.body).css('direction', 'rtl');
-                            }
-                        }, "copy"
-                    ]
+                    buttons: ["csv", "print"]
                 });
             }
         });
@@ -40,9 +27,9 @@ const Requests = () => {
     }, [])
 
     React.useEffect(() => {
-        $("#created_at").pDatepicker({format: "YYYY-MM-DD", initialValue: false, initialValueType: "persian"})
-        $("#working_group_at").pDatepicker({format: "YYYY-MM-DD", initialValue: false, initialValueType: "persian"})
-        $("#council_at").pDatepicker({format: "YYYY-MM-DD", initialValue: false, initialValueType: "persian"})
+        $(".datetime").each((index, element) => {
+            $(element).pDatepicker({ format: "YYYY-MM-DD HH:mm:ss", onSelect: unixDate => request[element.name] = new Date(unixDate).toISOString() })
+        })
     })
 
     const filter = () => {
@@ -57,7 +44,7 @@ const Requests = () => {
     const edit = id => {
         $.ajax({
             url: `/api/requests/${id}/`,
-            success: data => {setRequest(data); setShow(true)}
+            success: data => { setRequest(data); setShow(true) }
         })
     }
 
@@ -65,7 +52,7 @@ const Requests = () => {
         $.ajax({
             url: `/api/requests/${id}/`,
             method: "DELETE",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
+            headers: { "X-CSRFToken": $.cookie("csrftoken") },
             success: update
         })
     }
@@ -75,7 +62,7 @@ const Requests = () => {
             $.ajax({
                 url: `/api/requests/${request.id}/`,
                 method: "PUT",
-                headers: {"X-CSRFToken": $.cookie("csrftoken")},
+                headers: { "X-CSRFToken": $.cookie("csrftoken") },
                 contentType: "application/json",
                 data: JSON.stringify(request),
                 success: () => {
@@ -83,13 +70,13 @@ const Requests = () => {
                     setShow(false)
                     update()
                 },
-                error: data => setRequest(data.responseText)
+                error: data => setError(JSON.parse(data.responseText))
             })
         } else {
             $.ajax({
                 url: "/api/requests/",
                 method: "POST",
-                headers: {"X-CSRFToken": $.cookie("csrftoken")},
+                headers: { "X-CSRFToken": $.cookie("csrftoken") },
                 contentType: "application/json",
                 data: JSON.stringify(request),
                 success: () => {
@@ -97,7 +84,7 @@ const Requests = () => {
                     setShow(false)
                     update()
                 },
-                error: data => setRequest(data.responseText)
+                error: data => setError(JSON.parse(data.responseText))
             })
         }
     }
@@ -108,16 +95,16 @@ const Requests = () => {
         $.ajax({
             url: "/api/upload",
             method: "POST",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
+            headers: { "X-CSRFToken": $.cookie("csrftoken") },
             processData: false,
             contentType: false,
             data: formData,
-            success: data => setRequest({...request, file: data.file})
+            success: data => setRequest({ ...request, file: data.file })
         })
     }
 
     const changeHandler = e => {
-        setRequest({...request, [e.target.name]: e.target.value})
+        setRequest({ ...request, [e.target.name]: e.target.value })
     }
 
     return (
@@ -138,29 +125,29 @@ const Requests = () => {
                 </thead>
                 <tbody>
                     {requests.map((request, index) => (
-                            <tr>
-                                <td>{index + 1}</td>
-                                <td>
-                                    <button className="btn" onClick={() => edit(request.id)}>
-                                        {request.name}
-                                    </button>
-                                </td>
-                                <td>{config.choices.request.type[request.type]}</td>
-                                <td>{config.choices.request.media[request.media]}</td>
-                                <td className="d-flex flex-wrap justify-content-center">
-                                    {request.keywords ? request.keywords.split(", ").map(word => (
-                                        <span className="bg-primary rounded text-light m-1 p-1">{word}</span>
-                                    )): null}
-                                </td>
-                                <td>{request.created_by ? request.created_by.first_name + " " + request.created_by.last_name: null}</td>
-                                <td>{moment(request.created_at).format("YYYY-MM-DD")}</td>
-                                <td>{config.choices.request.status[request.status]}</td>
-                                <td>
-                                    <button className="btn btn-secondary m-1" onClick={() => edit(request.id)}><i className="fa-solid fa-pen-to-square"></i></button>
-                                    <button className="btn btn-danger m-1" onClick={() => _delete(request.id)}><i className="fa-solid fa-xmark"></i></button>
-                                </td>
-                            </tr>
-                        )
+                        <tr>
+                            <td>{index + 1}</td>
+                            <td>
+                                <button className="btn" onClick={() => edit(request.id)}>
+                                    {request.name}
+                                </button>
+                            </td>
+                            <td>{config.choices.request.type[request.type]}</td>
+                            <td>{config.choices.request.media[request.media]}</td>
+                            <td className="d-flex flex-wrap justify-content-center">
+                                {request.keywords ? request.keywords.split(", ").map(word => (
+                                    <span className="bg-primary rounded text-light m-1 p-1">{word}</span>
+                                )) : null}
+                            </td>
+                            <td>{request.created_by ? request.created_by.first_name + " " + request.created_by.last_name : null}</td>
+                            <td>{new Date(request.created_at).toLocaleString("fa")}</td>
+                            <td>{config.choices.request.status[request.status]}</td>
+                            <td>
+                                <button className="btn btn-secondary m-1" onClick={() => edit(request.id)}><i className="fa-solid fa-pen-to-square"></i></button>
+                                <button className="btn btn-danger m-1" onClick={() => _delete(request.id)}><i className="fa-solid fa-xmark"></i></button>
+                            </td>
+                        </tr>
+                    )
                     )}
                 </tbody>
             </table>
@@ -251,81 +238,97 @@ const Requests = () => {
                             <div className="row">
                                 <div className="col-sm">
                                     <label className="form-label" for="name">نام اثر:</label>
-                                    <input className="form-control" type="text" name="name" id="name" value={request.name} onChange={changeHandler} required />
+                                    <input className={error.name ? "form-control is-invalid" : "form-control"} type="text" name="name" id="name" value={request.name} onChange={changeHandler} required />
+                                    <div className="invalid-feedback">{error.name}</div>
                                 </div>
                                 <div className="col">
                                     <label className="form-label" for="type">نوع اثر:</label>
-                                    <select className="form-select" name="type" id="type" value={request.type} onChange={changeHandler} required>
+                                    <select className={error.type ? "form-select is-invalid" : "form-select"} name="type" id="type" value={request.type} onChange={changeHandler} required>
                                         <option value=""></option>
                                         {config.choices.request.type.map((item, index) => <option value={index}>{item}</option>)}
                                     </select>
+                                    <div className="invalid-feedback">{error.type}</div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm">
                                     <label className="form-label" for="media">رسانه:</label>
-                                    <select className="form-select" name="media" id="media" value={request.media} onChange={changeHandler} required>
+                                    <select className={error.media ? "form-select is-invalid" : "form-select"} name="media" id="media" value={request.media} onChange={changeHandler} required>
                                         <option value=""></option>
                                         {config.choices.request.media.map((item, index) => <option value={index}>{item}</option>)}
                                     </select>
+                                    <div className="invalid-feedback">{error.media}</div>
                                 </div>
                                 <div className="col">
                                     <label className="form-label" for="genre">ژانر:</label>
-                                    <select className="form-select" name="genre" id="genre" value={request.genre} onChange={changeHandler} required>
+                                    <select className={error.genre ? "form-select is-invalid" : "form-select"} name="genre" id="genre" value={request.genre} onChange={changeHandler} required>
                                         <option value=""></option>
                                         {config.choices.request.genre.map((item, index) => <option value={index}>{item}</option>)}
                                     </select>
+                                    <div className="invalid-feedback">{error.genre}</div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm">
                                     <label className="form-label" for="author">نویسنده:</label>
-                                    <input className="form-control" name="author" id="author" value={request.author} onChange={changeHandler} />
+                                    <input className={error.author ? "form-control is-invalid" : "form-control"} name="author" id="author" value={request.author} onChange={changeHandler} />
+                                    <div className="invalid-feedback">{error.author}</div>
                                 </div>
                                 <div className="col-sm">
                                     <label className="form-label" for="producer">تهیه کننده:</label>
-                                    <input className="form-control" name="producer" id="producer" value={request.producer} onChange={changeHandler} />
+                                    <input className={error.producer ? "form-control is-invalid" : "form-control"} name="producer" id="producer" value={request.producer} onChange={changeHandler} />
+                                    <div className="invalid-feedback">{error.producer}</div>
                                 </div>
                                 <div className="col">
                                     <label className="form-label" for="director">کارگردان:</label>
-                                    <input className="form-control" name="director" id="director" value={request.director} onChange={changeHandler} />
+                                    <input className={error.director ? "form-control is-invalid" : "form-control"} name="director" id="director" value={request.director} onChange={changeHandler} />
+                                    <div className="invalid-feedback">{error.director}</div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm">
                                     <label className="form-label" for="ages">رده سنی:</label>
-                                    <select className="form-select" name="ages" id="ages" value={request.ages} onChange={changeHandler} required>
+                                    <select className={error.ages ? "form-select is-invalid" : "form-select"} name="ages" id="ages" value={request.ages} onChange={changeHandler} required>
                                         <option value=""></option>
                                         {config.choices.request.ages.map((item, index) => <option value={index}>{item}</option>)}
                                     </select>
+                                    <div className="invalid-feedback">{error.ages}</div>
                                 </div>
                                 <div className="col">
                                     <label className="form-label" for="status">وضعیت:</label>
-                                    <select className="form-select" name="status" id="status" value={request.status} onChange={changeHandler} required>
+                                    <select className={error.status ? "form-select is-invalid" : "form-select"} name="status" id="status" value={request.status} onChange={changeHandler} required>
                                         <option value=""></option>
                                         {config.choices.request.status.map((item, index) => <option value={index}>{item}</option>)}
                                     </select>
+                                    <div className="invalid-feedback">{error.status}</div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm">
                                     <label className="form-label" for="keywords">کلید واژه ها:</label>
-                                    <input className="form-control" type="text" name="keywords" id="keywords" value={request.keywords} onChange={changeHandler} />
+                                    <input className={error.keywords ? "form-control is-invalid" : "form-control"} type="text" name="keywords" id="keywords" value={request.keywords} onChange={changeHandler} />
+                                    <div className="invalid-feedback">{error.keywords}</div>
                                 </div>
                                 <div className="col d-flex justify-content-evenly align-items-center flex-wrap">
                                     {request.keywords ? request.keywords.split(", ").map(word => (
                                         <span className="bg-secondary rounded text-light m-1 p-1">{word}</span>
-                                    )): null}
+                                    )) : null}
                                 </div>
                             </div>
+
                             <label className="form-label" for="created_at">تاریخ ثبت:</label>
-                            <input className="form-control" type="text" name="created_at" id="created_at" value={request.created_at ? moment(request.created_at).format("YYYY-MM-DD"): null} required />
-                            <label for="description">خلاصه طرح:</label>
-                            <textarea className="form-control" name="description" id="description" value={request.description} onChange={changeHandler}></textarea>
-                            <label for="file">فایل اثر:</label>
+                            <input className={error.created_at ? "form-control is-invalid" : "form-control datetime"} type="text" name="created_at" id="created_at" value={request.created_at} required />
+                            <div className="invalid-feedback">{error.created_at}</div>
+
+                            <label className="form-label" for="description">خلاصه طرح:</label>
+                            <textarea className={error.description ? "form-control is-invalid" : "form-control"} name="description" id="description" value={request.description} onChange={changeHandler}></textarea>
+                            <div className="invalid-feedback">{error.description}</div>
+
                             <div className="row">
                                 <div className="col-sm">
-                                    <input className="form-control" type="file" name="file" id="file" onChange={upload} />
+                                    <label className="form-label" for="file">فایل اثر:</label>
+                                    <input className={error.file ? "form-control is-invalid" : "form-control"} type="file" name="file" id="file" onChange={upload} />
+                                    <div className="invalid-feedback">{error.file}</div>
                                 </div>
                                 <div className="col">
                                     <a className="form-control" href={"/media/" + request.file}>{request.file ? request.file : "فایلی وجود ندارد"}</a>
@@ -338,25 +341,35 @@ const Requests = () => {
                         <div className="tab-pane fade" id="nav-considerations">
                             <div className="border rounded m-1 p-1">
                                 <label className="form-label" for="working_group_at">تاریخ کارگروه:</label>
-                                <input className="form-control" type="text" name="working_group_at" id="working_group_at" value={request.working_group_at ? moment(request.working_group_at).format("YYYY-MM-DD") : null} />
+                                <input className={error.working_group_at ? "form-control is-invalid" : "form-control datetime"} type="text" name="working_group_at" id="working_group_at" value={request.working_group_at} />
+                                <div className="invalid-feedback">{error.working_group_at}</div>
+
                                 <label className="form-label" for="working_group_users">اعضاء کارگروه:</label>
-                                <select className="form-select" name="working_group_users" id="working_group_users" value={request.working_group_users} onChange={(e) => setRequest({...request, [e.target.name]: $(e.target).val()})} multiple>
+                                <select className={error.working_group_users ? "form-select is-invalid" : "form-select"} name="working_group_users" id="working_group_users" value={request.working_group_users} onChange={(e) => setRequest({ ...request, [e.target.name]: $(e.target).val() })} multiple>
                                     <option value=""></option>
                                     {get_group_users("کارگروه").map(u => <option value={u.id}>{u.first_name} {u.last_name}</option>)}
                                 </select>
+                                <div className="invalid-feedback">{error.working_group_users}</div>
+
                                 <label className="form-label" for="working_group_considerations">ملاحظات کارگروه:</label>
-                                <textarea className="form-control" name="working_group_considerations" id="working_group_considerations" value={request.working_group_considerations} onChange={changeHandler}></textarea>
+                                <textarea className={error.working_group_considerations ? "form-control is-invalid" : "form-control"} name="working_group_considerations" id="working_group_considerations" value={request.working_group_considerations} onChange={changeHandler}></textarea>
+                                <div className="invalid-feedback">{error.working_group_considerations}</div>
                             </div>
                             <div className="border rounded m-1 p-1">
                                 <label className="form-label" for="council_at">تاریخ شورا:</label>
-                                <input className="form-control" type="text" name="council_at" id="council_at" value={request.council_at ? moment(request.council_at).format("YYYY-MM-DD") : null} />
+                                <input className={error.council_at ? "form-control is-invalid" : "form-control datetime"} type="text" name="council_at" id="council_at" value={request.council_at} />
+                                <div className="invalid-feedback">{error.council_at}</div>
+
                                 <label className="form-label" for="council_users">اعضاء شورا:</label>
-                                <select className="form-select" name="council_users" id="council_users" value={request.council_users} onChange={(e) => setRequest({...request, [e.target.name]: $(e.target).val()})} multiple>
+                                <select className={error.council_users ? "form-select is-invalid" : "form-select"} name="council_users" id="council_users" value={request.council_users} onChange={(e) => setRequest({ ...request, [e.target.name]: $(e.target).val() })} multiple>
                                     <option value=""></option>
                                     {get_group_users("شورا").map(u => <option value={u.id}>{u.first_name} {u.last_name}</option>)}
                                 </select>
+                                <div className="invalid-feedback">{error.council_users}</div>
+
                                 <label className="form-label" for="council_considerations">ملاحظات شورا:</label>
-                                <textarea className="form-control" name="council_considerations" id="council_considerations" value={request.council_considerations}  onChange={changeHandler} multiple></textarea>
+                                <textarea className={error.council_considerations ? "form-control is-invalid" : "form-control"} name="council_considerations" id="council_considerations" value={request.council_considerations} onChange={changeHandler} multiple></textarea>
+                                <div className="invalid-feedback">{error.council_considerations}</div>
                             </div>
                         </div>
                         <div className="tab-pane fade" id="nav-files">
@@ -370,19 +383,20 @@ const Requests = () => {
                                 </thead>
                                 <tbody>
                                     {request.files ? request.files.map((file, index) => (
-                                    <tr>
-                                        <td>{index}</td>
-                                        <td>
-                                            <a href={"/media/" + file}>{file}</a>
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-danger" onClick={() => {request.files.splice(index, 1); setRequest({...request, files: request.files})}}><i className="fa-solid fa-xmark"></i></button>
-                                        </td>
-                                    </tr>
-                                    )): null}
+                                        <tr>
+                                            <td>{index}</td>
+                                            <td>
+                                                <a href={"/media/" + file}>{file}</a>
+                                            </td>
+                                            <td>
+                                                <button className="btn btn-danger" onClick={() => { request.files.splice(index, 1); setRequest({ ...request, files: request.files }) }}><i className="fa-solid fa-xmark"></i></button>
+                                            </td>
+                                        </tr>
+                                    )) : null}
                                 </tbody>
                             </table>
-                            <input className="form-control" type="file" multiple />
+                            <input className={error.file ? "form-control is-invalid" : "form-control"} type="file" multiple />
+                            <div className="invalid-feedback">{error.file}</div>
                         </div>
                     </div>
                 </div>
@@ -390,7 +404,7 @@ const Requests = () => {
                     <button className="btn btn-primary" onClick={save}>ذخیره</button>
                 </div>
             </ReactBootstrap.Modal>
-            <button className="btn btn-light position-absolute bottom-0 end-0 m-1 p-2" onClick={() => {setRequest({}); setShow(true)}} >
+            <button className="btn btn-light position-absolute bottom-0 end-0 m-1 p-2" onClick={() => { setRequest({}); setShow(true) }} >
                 <i className="fa-solid fa-plus"></i>
             </button>
         </>
@@ -414,9 +428,9 @@ const Evaluations = props => {
             $.ajax({
                 url: `/api/evaluations/`,
                 method: "POST",
-                headers: {"X-CSRFToken": $.cookie("csrftoken")},
+                headers: { "X-CSRFToken": $.cookie("csrftoken") },
                 contentType: "application/json",
-                data: JSON.stringify({request: props.request, evaluator: x, note: $("#note").val() || null}),
+                data: JSON.stringify({ request: props.request, evaluator: x, note: $("#note").val() || null }),
                 success: update
             })
         })
@@ -426,7 +440,7 @@ const Evaluations = props => {
         $.ajax({
             url: `/api/evaluations/${id}/`,
             method: "DELETE",
-            headers: {"X-CSRFToken": $.cookie("csrftoken")},
+            headers: { "X-CSRFToken": $.cookie("csrftoken") },
             success: update
         })
     }
@@ -450,7 +464,7 @@ const Evaluations = props => {
                             <td>{e.id}</td>
                             <td>{e.evaluator.first_name} {e.evaluator.last_name} </td>
                             <td>{e.created_by.first_name} {e.created_by.last_name}</td>
-                            <td>{moment(e.created_at).format("YYYY-MM-DD")}</td>
+                            <td>{new Date(e.created_at).toLocaleString("fa")}</td>
                             <td>{config.choices.evaluation.status[e.status]}</td>
                             <td>
                                 <a className="btn btn-primary m-1" href={"/evaluation?id=" + e.id}><i className="fa-solid fa-print"></i></a>
